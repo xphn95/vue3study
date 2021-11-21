@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+  <!-- 按键修饰符: enter, tab, delete, esc, up, down, left, right, space -->
+  <!-- 鼠标修饰符: left, right, middle -->
+  <!-- 精确修饰符: exact -->
+  <div id="root">
+    <input @keydown.ctrl.exact="handleKeyDown" />
+  </div>
+  <script>
+    const { createApp } = Vue
+    const app = createApp({
+      data() {
+        return {
+
+        }
+      },
+      methods: {
+        handleKeyDown () {
+          console.log('key down')
+        }
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

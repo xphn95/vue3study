@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+  <div id="root">
+    <h2 @click="handleUpdate">{{message}}</h2>
+  </div>
+  <script>
+    const app = Vue.createApp({
+      /* template: `
+        <h2 @click="handleUpdate">{{message}}</h2>
+      `, */
+      data () {
+        return {
+          message: 'hello world'
+        }
+      },
+      // 实例生成之前
+      beforeCreate() {
+        console.log('beforeCreate')
+      },
+      // 实例生成之后
+      created() {
+        console.log('created')
+      },
+      // 模板被编译成函数之后
+      beforeMount() {
+        const root = document.getElementById('root').innerHTML
+        console.log('beforeMount', root)
+      },
+      // 挂载之后
+      mounted () {
+        const root = document.getElementById('root').innerHTML
+        console.log('mounted', root)
+      },
+      // data 中的数据被修改发生变化时
+      beforeUpdate() {
+        const root = document.getElementById('root').innerHTML
+        const newData = this.message
+        // 这里注意, 数据是已经修改的只是视图还没有重新渲染
+        console.log('beforeUpdate', root, newData)
+      },
+      // data 中的数据被修改页面重新渲染之后
+      updated() {
+        const root = document.getElementById('root').innerHTML
+        console.log('updated', root)
+      },
+      // 实例销毁时
+      beforeUnmount() {
+        console.log('beforeUnmount')
+      },
+      // 实例销毁之后
+      unmounted() {
+        console.log('unmounted')
+      },
+      methods: {
+        handleUpdate() {
+          this.message = 'bye'
+        }
+      }
+    })
+
+    app.mount('#root')
+    // 当执行完 mount 方法就开始初始化事件和生命周期
+    // 然后就是 beforeCreate 阶段
+    // 初始化导入和依赖
+    // created 阶段
+    // 是否存在 template, 如果存在就变成 render 函数, 如果没有就把挂载点内的内容当作 template 来编译
+    // beforeMount 阶段
+    // 挂载
+    // mounted 阶段
+    // data 数据被修改发生变化时, beforeUpdate 阶段
+    // 虚拟 dom 重新渲染
+    // data 数据被修改页面完成重新渲染, updated 阶段
+  </script>
+</body>
+</html>

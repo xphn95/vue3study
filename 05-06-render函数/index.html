@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <!-- 根组件 -->
+  <template id="app">
+    <hello :level="1">hello~</hello>
+  </template>
+  <!-- 子组件 -->
+  <template id="hello">
+    <h1 v-if="level === 1">
+      <slot></slot>
+    </h1>
+    <h2 v-if="level === 2">
+      <slot></slot>
+    </h2>
+    <h3 v-if="level === 3">
+      <slot></slot>
+    </h3>
+    <h4 v-if="level === 4">
+      <slot></slot>
+    </h4>
+    <h5 v-if="level === 5">
+      <slot></slot>
+    </h5>
+    <h6 v-if="level === 6">
+      <slot></slot>
+    </h6>
+  </template>
+  <script>
+    // template -> 解析成 render 函数 -> 调用 h 函数 -> 生成虚拟 DOM (js对象) -> 真实 DOM -> 渲染到页面上
+    const hello = {
+      // template: '#hello',
+      props: {
+        level: {
+          type: Number,
+          default: 6
+        }
+      },
+      render() {
+        const { h } = Vue
+        return h(`h${this.level}`, {}, this.$slots.default())
+      }
+    }
+    const root = {
+      template: '#app',
+      components: {
+        hello
+      }
+    }
+    const app = Vue.createApp(root)
+    app.mount('#root')
+  </script>
+</body>
+</html>

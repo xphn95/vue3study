@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <template id="app">
+    <div>{{nameobj.name}}</div>
+    <div>{{name}}</div>
+  </template>
+
+  <script>
+    const { ref, reactive, readonly, toRefs } = Vue
+    const root = {
+      template: '#app',
+      setup() {
+        const nameobj = reactive({name: 'genji'})
+        const copyNameobj = readonly(nameobj)
+        setTimeout(() => {
+          nameobj.name = 'McCree'
+          copyNameobj.name = 'Ashe' // 会报警告, 无法修改只读的, 但仍然是响应式的
+        }, 2000)
+        // toRefs 会做一个转换
+        // proxy({name: 'genji'}) -> {name: proxy({value: 'genji'})}
+        const { name } = toRefs(copyNameobj)
+        return {
+          nameobj,
+          name
+        }
+      },
+      mounted() {
+        console.log(this.name)
+      }
+    }
+    const app = Vue.createApp(root)
+    app.mount('#root')
+  </script>
+</body>
+</html>

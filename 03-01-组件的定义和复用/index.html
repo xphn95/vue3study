@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    div {
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <counter-parent/>
+  </div>
+  <script>
+    // 这是全局组件的用法, 全都挂在 app 上, 随时都可以使用
+    // 优点是简单, 但是性能不好
+    const { createApp } = Vue
+    const app = createApp({
+      data() {
+        return {
+          message: 'hello'
+        }
+      }
+    })
+    app.component('counter-parent', {
+      template: `
+        <counter></counter>
+        <counter></counter>
+        <counter></counter>
+        <counter></counter>
+      `
+    })
+    app.component('counter', {
+      template: `
+        <div @click="count += 1">{{count}}</div>
+      `,
+      data() {
+        return {
+          count: 1
+        }
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

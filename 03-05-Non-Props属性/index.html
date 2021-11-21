@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    p {
+      color: orange;
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <msg msg1="msg1" msg2="msg2"></msg>
+  </div>
+  <script>
+    const msg = {
+      // 这个属性设置成 false 没有明确接收的传值不会默认作为标签属性
+      // inheritAttrs: false,
+      template: `
+        <p>v-bind="$attrs"可以拿到全部属性</p>
+        <div v-bind="$attrs">{{$attrs}}</div>
+        <p>:想要绑定的属性名="$attrs.属性名"可以拿到指定的属性</p>
+        <div :msg="$attrs.msg1">{{$attrs.msg1}}</div>
+        <div :msg="$attrs.msg2">{{this.$attrs.msg2}}</div>
+      `
+    }
+    const { createApp } = Vue
+    const app = createApp({
+      components: {
+        msg
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    #root {
+      display: flex;
+      justify-content: center;
+      margin: 30px auto;
+    }
+    .todoList {
+      margin: 0;
+      padding: 0;
+    }
+    .todoList li {
+      list-style: none;
+      font-size: 18px;
+      text-align: center;
+      user-select: none;
+    }
+    .del {
+      text-decoration: line-through;
+      text-decoration-color: palegoldenrod;
+      text-decoration-thickness: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    const app = Vue.createApp({
+      template: `
+        <div>
+          <input type="text" v-model="newValue" @keyup.enter="addItem">
+          <button @click="addItem">添加</button>
+          <ul v-if="list.length" class="todoList">
+            <show-item
+              v-for="(item, index) of list"
+              :key="index"
+              :itemValue="item.value"
+              @click="removeItem(index)"
+              :class="{del: list[index].finish}"
+            />
+          </ul>
+        </div>
+      `,
+      data () {
+        return {
+          newValue: '',
+          list: []
+        }
+      },
+      methods: {
+        addItem() {
+          this.list.push({
+            value: this.newValue,
+            finish: false
+          })
+          this.newValue = ''
+        },
+        removeItem(index) {
+          const oldValue = this.list[index].finish
+          this.list[index].finish = !oldValue
+        }
+      }
+    })
+
+    app.component("ShowItem", {
+      template: `
+        <li>{{itemValue}}</li>
+      `,
+      props: {
+        itemValue: String
+      }
+    })
+
+    app.mount('#root')
+  </script>
+</body>
+</html>

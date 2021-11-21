@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <template id="app">
+    <div>{{this.$options.number}}</div>
+  </template>
+  <script>
+    const myMixin = {
+      number: 2
+    }
+    const { createApp } = Vue
+    const app = createApp({
+      template: "#app",
+      number: 1,
+      mixins: [myMixin]
+    })
+    // 改变选项的混合策略
+    app.config.optionMergeStrategies.number = (mixinVal, appVal) => {
+      return mixinVal || appVal
+    }
+    app.mount('#root')
+  </script>
+</body>
+</html>

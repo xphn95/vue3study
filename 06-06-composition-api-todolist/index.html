@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Vue3 todoList</title>
+  <style>
+    * {
+      user-select: none;
+      padding: 0;
+      margin: 0;
+    }
+    ul {
+      display: flex;
+      flex-direction: column;
+      height: 200px;
+    }
+    ul li {
+      height: 20px;
+      padding: 10px;
+      list-style: none;
+      text-align: center;
+      justify-content: space-between;
+    }
+    .wrap {
+      margin: 30px auto;
+      width: 200px;
+      height: 200px;
+      /* border: 1px solid #000; */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .input-wrap {
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <template id="app">
+    <div class="wrap">
+      <div class="input-wrap">
+        <input
+          type="text"
+          :value="inputValue"
+          @input="handleInput"
+          @keyup.enter="addItem"
+        >
+        <button @click="addItem">添加</button>
+      </div>
+      <ul>
+        <child
+          v-for="(item, index) in todoList"
+          :key="index"
+          :content="item"
+          @click="handleRemove(index)"
+        >
+        </child>
+      </ul>
+    </div>
+  </template>
+  <template id="child">
+    <li>{{content}}</li>
+  </template>
+  <script>
+    const child = {
+      template: '#child',
+      props: {
+        content: String
+      },
+      setup(props) {
+        const { toRefs } = Vue
+        const { content } = toRefs(props)
+        return {
+          content
+        }
+      }
+    }
+    const root = {
+      template: '#app',
+      components: {
+        child
+      },
+      setup() {
+        const { ref, reactive } = Vue
+        const inputValue = ref('')
+        const todoList = reactive(['js', 'vue', 'sass', 'webpack'])
+        function addItem () {
+          inputValue.value && todoList.push(inputValue.value)
+          inputValue.value = ''
+        }
+        function handleInput (e) {
+          inputValue.value = e.target.value
+          // console.log(e.target.value)
+        }
+        function handleRemove (index) {
+          todoList.splice(index, 1)
+          console.log('111')
+        }
+        return {
+          inputValue,
+          todoList,
+          handleInput,
+          addItem,
+          handleRemove
+        }
+      }
+    }
+    const app = Vue.createApp(root)
+    app.mount('#root')
+  </script>
+</body>
+</html>

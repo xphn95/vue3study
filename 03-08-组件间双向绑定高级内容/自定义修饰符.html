@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    div {
+      font-size: 40px;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <!-- 使用自定义修饰符 -->
+    <counter v-model.captalize="num"></counter>
+  </div>
+  <script>
+    const counter = {
+      template: `
+        <div @click="handleClick('b')">{{modelValue}}</div>
+      `,
+      props: {
+        modelValue: String,
+        // 默认是空对象, 如果使用了修饰符, 就是 { 修饰符: true }
+        modelModifiers: {
+          default: () => ({})
+        }
+      },
+      mounted() {
+        console.log(this.modelModifiers)
+      },
+      methods: {
+        handleClick(str) {
+          let newState = this.modelValue + str
+          // 判断是否使用了修饰符
+          if (this.modelModifiers.captalize) {
+            newState = newState.toUpperCase()
+          }
+          this.$emit('update:modelValue', newState)
+        }
+      }
+    }
+    const { createApp } = Vue
+    const app = createApp({
+      components: {
+        counter
+      },
+      data() {
+        return {
+          num: 'a'
+        }
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

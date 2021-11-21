@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+  <div id="root">
+    <!-- 这里注意 DOM 中组件不能写成自闭合的形式 -->
+    <!-- 这里尝试写成自闭合, 组件就出现不能复用的效果 -->
+    <!-- 父模板里调用的数据是父组件的数据 -->
+    <!-- 子模板里调用的数据是子组件的数据 -->
+    <myform>
+      <button>{{text}}</button>
+    </myform>
+    <myform>
+      <div>{{text}}</div>
+    </myform>
+    <myform></myform>
+  </div>
+  <script>
+    const myform = {
+      // 使用插槽是无法绑定事件的
+      // 解决办法是给 slot 包裹一个 span 标签绑定上事件
+      // slot 里面包裹的内容就是父组件不传东西时的默认值
+      template: `
+        <div>
+          <input />
+          <span @click="handleClick">
+            <slot>
+              <button>default value</button>
+            </slot>
+          </span>
+        </div>
+      `,
+      methods: {
+        handleClick() {
+          alert(123)
+        }
+      }
+    }
+    const { createApp } = Vue
+    const app = createApp({
+      /* template: `
+        <my-component/>
+        <my-component/>
+        <my-component/>
+      `, */
+      components: {
+        myform
+      },
+      data() {
+        return {
+          text: '提交'
+        }
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

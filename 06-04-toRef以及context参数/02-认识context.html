@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Document</title>
+  <style>
+    * {
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <template id="app">
+    <!-- <child test="test"> -->
+    <child @listen-click="childClick">
+      <p>slot text</p>
+    </child>
+  </template>
+  <template id="child">
+    <div @click="handleClick">{{data.name}}</div>
+    <!-- <slot></slot> -->
+  </template>
+  <script>
+    const child = {
+      template: '#child',
+      setup(props, context) {
+        const { reactive, h } = Vue
+        const { attrs, slots, emit } = context
+        console.log(attrs.test) // 接收父组件传递的 None-props 属性(就是子组件没有接收的属性)
+        console.log(slots.default()) // 接收父组件传递的插槽
+        const data = reactive({
+          name: 'ashe'
+        })
+        // 子组件的点击事件
+        function handleClick () {
+          // 触发父组件的同名事件
+          emit('listen-click')
+        }
+        return {
+          data,
+          handleClick
+        }
+        /* return () => h('div', {}, [h('div', {}, data.name), slots.default()]) */
+      }
+    }
+    const root = {
+      template: '#app',
+      components: {
+        child
+      },
+      setup() {
+        // 定义子组件的事件方法
+        function childClick() {
+          console.log('child click')
+        }
+        return {
+          childClick
+        }
+      }
+    }
+    const app = Vue.createApp(root)
+    app.mount('#root')
+  </script>
+</body>
+</html>

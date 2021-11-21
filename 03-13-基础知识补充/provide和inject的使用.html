@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="http://unpkg.com/vue@next"></script>
+  <title>Document</title>
+</head>
+<body>
+  <!-- provide和inject可以实现向后代组件传值, 但是不是响应式的 -->
+  <div id="root"></div>
+
+  <template id="app">
+    <child></child>
+    <button @click="count += 1">add</button>
+  </template>
+
+  <template id="child">
+    <p>hello</p>
+    <grandson></grandson>
+  </template>
+
+  <template id="grandson">
+    <div>{{count}}</div>
+  </template>
+  <script>
+    const { createApp } = Vue
+    const app = createApp({
+      template: "#app",
+      data() {
+        return {
+          count: 5
+        }
+      },
+      provide() {
+        return {
+          count: this.count
+        }
+      }
+    })
+
+    app.component('child', {
+      template: "#child",
+    })
+
+    app.component('grandson', {
+      template: "#grandson",
+      inject: ['count']
+    })
+    const vm = app.mount('#root')
+  </script>
+</body>
+</html>

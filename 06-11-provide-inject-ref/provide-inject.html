@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <template id="app">
+    <son></son>
+  </template>
+  <template id="son">
+    <grandson></grandson>
+  </template>
+  <template id="grandson">
+    <div>{{people}}</div>
+    <button @click="modifyName">修改</button>
+    <button @click="modifyNamePro('McCree')">修改(祖先组件)</button>
+  </template>
+  <script>
+    const grandson = {
+      template: '#grandson',
+      setup() {
+        const {
+          inject,
+          onMounted,
+          onUpdated,
+          watchEffect
+        } = Vue
+        // 第二个参数不是必须的, 是默认值, 当祖先组件没有传这个参数时使用这个默认值
+        const people = inject('objname', 'ashe')
+        onMounted(() => {
+          console.log(people.value)
+        })
+        // 这个修改是不成功的, 因为是只读的
+        const modifyName = () => {
+          people.value = 'Dva'
+        }
+        // 祖先组件提供的方法
+        const modifyNamePro = inject('modifyNamePro')
+        /* onMounted(() => {
+          console.log(modifyNamePro)
+        }) */
+        watchEffect(() => {
+          console.log(people.value)
+        })
+        return {
+          people,
+          modifyName,
+          modifyNamePro
+        }
+      }
+    }
+    const son = {
+      template: '#son',
+      components: {
+        grandson
+      }
+    }
+    const root = {
+      template: '#app',
+      components: {
+        son
+      },
+      setup(props) {
+        const {
+          reactive,
+          provide,
+          readonly,
+          computed,
+          watchEffect
+        } = Vue
+        const obj = reactive({
+          name: 'mike'
+        })
+        watchEffect(() => {
+          console.log(obj.name, 80)
+        })
+        /* setTimeout(() => {
+          obj.name = 'genji'
+          console.log('changed')
+        }, 5000) */
+        // 两个都是必须的, key 和 value
+        // provide('objname', readonly(obj.name)) // 这种传值不是响应式的
+        provide('objname', readonly(computed(() => {
+          return obj.name
+        })))
+        // 传递一个修改的函数
+        const modifyNamePro = (newname) => {
+          obj.name = newname
+        }
+        provide('modifyNamePro', modifyNamePro)
+        return {}
+      }
+    }
+    const app = Vue.createApp(root)
+    app.mount('#root')
+  </script>
+</body>
+</html>

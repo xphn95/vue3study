@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Document</title>
+  <style>
+    /* 过渡 */
+    /* 入场动画 */
+    /* .v-enter-from {
+      opacity: 0;
+    }
+    .v-enter-active {
+      transition: opacity 3s ease-in;
+    }
+    .v-enter-to {
+      opacity: 1;
+    } */
+
+    /* 出场动画 */
+    /* .v-leave-from {
+      opacity: 1;
+    }
+    .v-leave-active {
+      transition: opacity 3s ease-out;
+    }
+    .v-leave-to {
+      opacity: 0;
+    } */
+
+    /* 动画 */
+    @keyframes shake {
+      0% {
+        transform: translateX(-100px);
+      }
+      50% {
+        transform: translateX(-50px);
+      }
+      100% {
+        transform: translateX(50px);
+      }
+    }
+    /* .v-enter-active,.v-leave-active {
+      animation: shake 3s ease-out;
+    } */
+    .my-enter-active,.my-leave-active {
+      animation: shake 3s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <template id="app">
+    <transition name="my">
+      <div v-if="show">hello</div>
+    </transition>
+    <button @click="handleClick">切换</button>
+  </template>
+  <script>
+    const { createApp } = Vue
+    const app = createApp({
+      template: '#app',
+      data() {
+        return {
+          show: true
+        }
+      },
+      methods: {
+        handleClick() {
+          this.show = !this.show
+        }
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

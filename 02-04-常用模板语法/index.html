@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+  <div id="root">
+    <div v-html="message"></div>
+    <h2 v-once>{{tips}}</h2>
+    <!-- 这种中括号的写法可以实现动态属性, 不光v-on, v-bind也是可以的 -->
+    <p @[event]="handleClick">{{message}}</p>
+    <form action="https://www.baidu.com">
+      <!-- 直接加 .prevent 就可以取消默认行为了 -->
+      <button @click.prevent="handleSubmit">提交</button>
+    </form>
+  </div>
+  <script>
+    let that
+    const app = Vue.createApp({
+      data() {
+        return {
+          message: `<strong>hello world</strong>`,
+          tips: '123',
+          event: 'mouseenter'
+        }
+      },
+      methods: {
+        handleClick() {
+          this.message = 'bye'
+        },
+        handleSubmit(e) {
+          // 取消默认行为
+          // e.preventDefault()
+        }
+      },
+      mounted() {
+        that = this
+      }
+    })
+    const vm = app.mount('#root')
+    console.log(that === vm)  // true, 说明 Vue 的 options API 中的 this 指向 Vue 实例
+  </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+  <div id="root">
+    <layout>
+      <!-- v-slot:xxx 要使用在 template 上, 可简写为 #xxx -->
+      <template #header>
+        <div>header</div>
+      </template>
+      <template #footer>
+        <div>footer</div>
+      </template>
+    </layout>
+  </div>
+  <template id="layout">
+    <!-- name 来指定名称与 v-slot 对应 -->
+    <slot name="header"></slot>
+    <div>content</div>
+    <slot name="footer"></slot>
+  </template>
+  <script>
+    const layout = {
+      template: '#layout'
+    }
+    const { createApp } = Vue
+    const app = createApp({
+      components: {
+        layout
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <template id="app">
+    <child></child>
+  </template>
+  <template id="child">
+    <div>{{count}}</div>
+  </template>
+  <script>
+    // 这样写在哪个组件混入哪个组件才能用
+    /* const myMixin = {
+      data() {
+        return {
+          count: 1
+        }
+      }
+    } */
+    const { createApp } = Vue
+    const app = createApp({
+      template: '#app',
+      // mixins: [myMixin]
+    })
+    // 这是全局的 mixin, 所有组件都可以直接使用
+    app.mixin({
+      data() {
+        return {
+          count: 1
+        }
+      }
+    })
+    app.component('child', {
+      template: '#child'
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

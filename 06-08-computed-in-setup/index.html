@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <template id="app">
+    <input type="text" :value="msg" @input="handleInput">
+    <div>{{hiMsg}}</div>
+  </template>
+  <script>
+    const root = {
+      template: '#app',
+      setup(props) {
+        const { ref, computed } = Vue
+        const msg = ref('hello')
+        const handleInput = (e) => {
+          msg.value = e.target.value
+        }
+        // 使用 computed 包裹一个箭头函数返回计算值即可
+        // 这是简单的用法
+        /* const hiMsg = computed(() => {
+          // console.log(msg.value)
+          return `hello, ${msg.value}`
+        }) */
+        let hiMsg = computed({
+          get() {
+            return `hello, ${msg.value}`
+          },
+          set(newValue) {
+            return msg.value = newValue
+          }
+        })
+        setTimeout(() => {
+          hiMsg.value = 'new value'
+        }, 3000)
+        return {
+          msg,
+          handleInput,
+          hiMsg
+        }
+      }
+    }
+    const app = Vue.createApp(root)
+    app.mount('#root')
+  </script>
+</body>
+</html>

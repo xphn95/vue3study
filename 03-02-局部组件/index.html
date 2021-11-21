@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    div {
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <counter-parent></counter-parent>
+  </div>
+  <script>
+    const counter = {
+      template:  `
+        <div @click="counter += 1">{{counter}}</div>
+      `,
+      data() {
+        return {
+          counter: 1
+        }
+      }
+    }
+    const { createApp } = Vue
+    const app = createApp({})
+    app.component('counter-parent', {
+      components: {
+        counter
+      },
+      template: `
+        <counter></counter>
+        <counter></counter>
+        <counter></counter>
+        <counter></counter>
+      `
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

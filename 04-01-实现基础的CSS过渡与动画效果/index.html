@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="http://unpkg.com/vue@next"></script>
+  <title>Document</title>
+  <style>
+    /* 动画 */
+    /* @keyframes leftToRight {
+      0% {
+        transform: translateX(-100px);
+      }
+      50% {
+        transform: translateX(-50px);
+      }
+      0% {
+        transform: translateX(0px);
+      }
+    }
+    .animation {
+      animation: leftToRight 3s ease-out;
+    } */
+
+    /* 过渡 */
+    .transition {
+      transition: 5s background-color ease;
+    }
+
+    .blue {
+      background-color: blue;
+    }
+
+    .pink {
+      background-color: pink;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <template id="app">
+    <div :class="animate">hello world</div>
+    <button @click="handleClick">切换</button>
+  </template>
+
+  <script>
+    const { createApp } = Vue
+    const app = createApp({
+      template: '#app',
+      data() {
+        return {
+          has: true,
+          /* animate: {
+            // animation: false
+            transition: true,
+            blue: this.has,
+            green: !this.has
+          } */
+        }
+      },
+      computed: {
+        animate() {
+          return {
+            transition: true,
+            blue: this.has,
+            pink: !this.has
+          }
+        }
+      },
+      methods: {
+        handleClick() {
+          // this.animate.animation = !this.animate.animation
+          this.has = !this.has
+          console.log(this.has);
+        }
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

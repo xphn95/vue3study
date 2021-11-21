@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    * {
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <!-- <counter v-model="num"></counter> -->
+    <!-- 自己起别名 v-model:别名 -->
+    <counter v-model:count="num"></counter>
+  </div>
+  <script>
+    const counter = {
+      /* template: `
+        <div @click="handleClick(5)">{{modelValue}}</div>
+      `, */
+      template: `
+        <div @click="handleClick(5)">{{count}}</div>
+      `,
+      props: {
+        // 这是默认的
+        // modelValue: Number
+        // 可以用自己写的别名
+        count: Number
+      },
+      methods: {
+        handleClick(inc) {
+          // this.$emit('update:modelValue', this.modelValue + inc)
+          this.$emit('update:count', this.count + inc)
+        }
+      }
+    }
+    const { createApp } = Vue
+    const app = createApp({
+      components: {
+        counter
+      },
+      data() {
+        return {
+          num: 1
+        }
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

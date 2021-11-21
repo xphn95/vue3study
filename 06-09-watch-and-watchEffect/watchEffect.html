@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>watchEffect</title>
+</head>
+<body>
+  <div id="root"></div>
+  <template id="app">
+    <input type="text" v-model="msg">
+    <div>{{msg}}</div>
+  </template>
+  <script>
+    const { watchEffect } = Vue
+    const root = {
+      template: '#app',
+      setup(props) {
+        const { ref, watch, watchEffect } = Vue
+        const msg = ref('hello')
+        const stop = watch(msg, (newMsg, oldMsg) => {
+          msg.value = newMsg
+          console.log(newMsg)
+        }, {
+          immediate: true
+        })
+        /* const stopEffect = watchEffect(() => {
+          console.log(msg.value)
+        }) */
+        setTimeout(() => {
+          console.log('stop')
+          // stopEffect()
+          stop()
+        }, 5000)
+        return {
+          msg
+        }
+      }
+    }
+    const app = Vue.createApp(root)
+    app.mount('#root')
+  </script>
+</body>
+</html>

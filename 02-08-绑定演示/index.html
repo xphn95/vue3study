@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    .red {
+      color: plum;
+    }
+    .blue {
+      color: lightskyblue
+    }
+    .italic {
+      font-style: italic;
+    }
+    .bold {
+      font-weight: bold;
+      font-size: 26px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <p :class="classArr">{{message}}</p>
+    <demo :class="myClass"/>
+  </div>
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          message: 'hello world',
+          // 对象的方式
+          /* classObj: {
+            red: true,
+            italic: true
+          } */
+          // 数组的方式(甚至和对象的方式混合)
+          classArr: ["red", "italic", { bold: true }],
+          myClass: 'red'
+        }
+      },
+      mounted() {
+        setTimeout(() => {
+          this.myClass = 'blue'
+        }, 3000)
+      },
+      methods: {
+        changeClass() {
+          this.myClass = 'blue'
+          console.log(this.myClass)
+        }
+      }
+    })
+    app.component('demo', {
+      // 因为 Vue3 可以不用根节点包裹, 但是在使用组件时绑定的属性没法分配了
+      // $attrs 可以解决这个问题, 甚至是响应式的数据
+      template: `
+        <div :class="$attrs.class">one</div>
+        <div :class="$attrs.class">two</div>
+      `
+    })
+    const vm = app.mount('#root')
+  </script>
+</body>
+</html>

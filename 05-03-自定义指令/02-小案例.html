@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Document</title>
+  <style>
+    .header {
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <template id="app">
+    <div class="header" v-pos:abc="this.top">
+      <input type="text">
+      <button @click="moveTop">下移</button>
+    </div>
+  </template>
+  <script>
+    const directives = {
+      /* pos: {
+        mounted(el, binding) {
+          el.style.top = `${binding.value}px`
+        },
+        updated(el, binding) {
+          el.style.top = `${binding.value}px`
+        }
+      } */
+      // 如果 mounted 和 updated 行为一致, 可以简写为一个函数
+      // 文档: https://v3.cn.vuejs.org/guide/custom-directive.html#%E5%87%BD%E6%95%B0%E7%AE%80%E5%86%99
+      pos: (el, binding) => {
+        console.log(binding.arg)
+        el.style.top = `${binding.value}px`
+      }
+    }
+    const { createApp } = Vue
+    const app = createApp({
+      template: '#app',
+      directives,
+      data() {
+        return {
+          top: 10
+        }
+      },
+      methods: {
+        moveTop() {
+          this.top += 10
+        }
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

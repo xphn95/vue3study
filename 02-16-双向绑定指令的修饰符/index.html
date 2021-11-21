@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+  <div id="root">
+    <!-- lazy 修饰符: 失焦才会跟着变化 -->
+    <!-- number 修饰符: 做类型转化 -->
+    <!-- trim 修饰符: 去掉字符串前后的空格 -->
+    <!-- <input type="text" v-model.lazy="message"> -->
+    <input type="text" v-model.trim="message">
+    <p>{{message}}</p>
+    <hr>
+    <input type="number" v-model.number="num">
+    <p>{{num}}</p>
+    <p>{{typeof num}}</p>
+  </div>
+  <script>
+    const { createApp } = Vue
+    const app = createApp({
+      data() {
+        return {
+          message: '',
+          num: ''
+        }
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

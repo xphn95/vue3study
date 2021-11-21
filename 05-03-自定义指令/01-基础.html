@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+
+  <template id="app">
+    <input type="text" v-focus v-if="isShow">
+    <button @click="isShow = !isShow">显示/隐藏</button>
+  </template>
+  <script>
+    // 局部注册自定义指令
+    const directives = {
+      focus: {
+        beforeMount(el) {
+          console.log(el, 'beforeMount')
+        },
+        mounted(el) {
+          el.focus()
+          console.log('mounted')
+        },
+        beforeUpdate() {
+          console.log('beforeUpdate')
+        },
+        updated() {
+          console.log('updated')
+        },
+        beforeUnmount() {
+          console.log('beforeUnmount')
+        },
+        unmounted() {
+          console.log('mounted')
+        }
+      }
+    }
+    const { createApp } = Vue
+    const app = createApp({
+      template: '#app',
+      directives,
+      data() {
+        return {
+          isShow: false
+        }
+      }
+      /* mounted() {
+        this.$refs.input.focus()
+      } */
+    })
+    // 全局注册自定义指令
+    /* app.directive('focus', {
+      mounted(el) {
+        el.focus()
+      }
+    }) */
+    app.mount('#root')
+  </script>
+</body>
+</html>

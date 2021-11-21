@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <template id="app">
+    <div>{{name}}</div>
+    <div>{{age}}</div>
+  </template>
+  <script>
+    const root = {
+      template: '#app',
+      setup() {
+        const { reactive, toRefs, toRef } = Vue
+        const data = reactive({
+          name: 'ashe'
+        })
+        const { name } = toRefs(data)
+        // 对不存在的数据会设置为默认的值为 undefined 的响应式数据
+        const age = toRef(data, 'age')
+        setTimeout(() => {
+          // console.log(age)
+          name.value = 'Dva'
+          age.value = 20
+        }, 2000)
+        return {
+          name,
+          age
+        }
+      }
+    }
+    const app = Vue.createApp(root)
+    app.mount('#root')
+  </script>
+</body>
+</html>

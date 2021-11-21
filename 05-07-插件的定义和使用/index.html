@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <template id="app">
+    <my-title></my-title>
+  </template>
+  <template id="myTitle">
+    <div>
+      <span>{{name}}</span>
+      <input type="text" v-focus>
+    </div>
+  </template>
+  <script>
+    // 定义插件
+    const myPlugin = {
+      install(app, options) {
+        // console.log(app, options)
+        app.provide('name', 'mike')
+        app.directive('focus', {
+          mounted(el) {
+            el.focus()
+            el.value = 'test'
+          }
+        })
+        app.mixin({
+          mounted() {
+            console.log('mixin')
+          }
+        })
+        // 全局属性配置
+        app.config.globalProperties.$sayHello = () => {
+          console.log('hi world')
+        }
+      }
+    }
+    // 子组件
+    const myTitle = {
+      template: '#myTitle',
+      inject: ['name'],
+      mounted() {
+        this.$sayHello()
+      }
+    }
+    // 根组件
+    const root = {
+      template: '#app',
+      components: {
+        myTitle
+      }
+    }
+    const app = Vue.createApp(root)
+    app.use(myPlugin)
+    app.mount('#root')
+  </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    .v-enter-from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    .v-enter-active, .v-leave-active {
+      transition: all 1s ease-out;
+    }
+    .v-enter-to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .v-move {
+      transition: all .5s ease-in;
+    }
+    .v-leave-to {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    .list-item {
+      display: inline-block;
+      margin-right: 10px;
+      user-select: none;
+    }
+    button {
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <template id="app">
+    <transition-group>
+      <span
+        v-for="(item, index) of list"
+        :key="item"
+        class="list-item"
+        @click="removeItem(index)"
+      >
+        {{item}}
+      </span>
+    </transition-group>
+    <button @click="handleClick">切换</button>
+  </template>
+
+  <script>
+    const { createApp } = Vue
+    const app = createApp({
+      template: '#app',
+      data() {
+        return {
+          list: [1, 2, 3]
+        }
+      },
+      methods: {
+        handleClick() {
+          this.list.unshift(this.list.length + 1)
+        },
+        removeItem(index) {
+          this.list.splice(index, 1)
+        }
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

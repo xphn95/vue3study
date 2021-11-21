@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+  <div id="root">
+    <test :content="num"></test>
+  </div>
+  <script>
+    // type: String, Number, Boolean, Array, Object, Function, Symbol
+    // validator (函数)判断是否符合预期的传值标准, 返回布尔值
+    // required 是否必须
+    // default: 默认值
+    const test = {
+      props: {
+        content: {
+          type: Number,
+          validator(value) {
+            return value < 1000
+          }
+        }
+      },
+      template: `
+        <div>{{content}}</div>
+      `
+    }
+    const { createApp } = Vue
+    const app = createApp({
+      components: {
+        test
+      },
+      data() {
+        return {
+          num: 123
+        }
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+  <div id="root">
+    <myform v-model:base="num" v-model:inc="inc">
+      <button>{{text}}</button>
+    </myform>
+    <p>结果: {{num}}</p>
+    <p>增量: {{inc}}</p>
+  </div>
+  <template id="myform">
+    <input type="text" @input="handleInput" v-model="inputVal">
+    <span @click="add">
+      <slot></slot>
+    </span>
+  </template>
+  <script>
+    const myform = {
+      template: '#myform',
+      props: {
+        base: Number,
+        inc: Number
+      },
+      data() {
+        return {
+          inputVal: ''
+        }
+      },
+      methods: {
+        /* handleClick() {
+          alert(123)
+        }, */
+        handleInput() {
+          this.$emit('update:inc', +this.inputVal)
+        },
+        add() {
+          this.$emit('update:base', this.base + this.inc)
+          // this.$emit('update:inc', 0)
+          this.inputVal = ""
+        }
+      }
+    }
+    const { createApp } = Vue
+    const app = createApp({
+      components: {
+        myform
+      },
+      data() {
+        return {
+          text: '相加',
+          num: 0,
+          inc: 0
+        }
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

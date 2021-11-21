@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    .v-enter-from, .v-leave-to {
+      opacity: 0;
+    }
+    .v-enter-active, .v-leave-active {
+      transition: opacity 3s ease-out;
+    }
+    .v-enter-to, .v-leave-from {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <template id="ComponentA">
+    <div>hello</div>
+  </template>
+  <template id="ComponentB">
+    <div>bye</div>
+  </template>
+
+  <template id="app">
+    <transition mode="out-in" appear>
+      <!-- <div v-if="isShow">hello</div>
+      <div v-else>bye</div> -->
+      <component-a v-if="isShow"></component-a>
+      <component-b v-else></component-b>
+    </transition>
+    <button @click="handleClick">切换</button>
+  </template>
+
+  <script>
+    const { createApp } = Vue
+    const app = createApp({
+      template: '#app',
+      data() {
+        return {
+          isShow: true
+        }
+      },
+      methods: {
+        handleClick() {
+          this.isShow = !this.isShow
+        }
+      }
+    })
+    app.component('ComponentA', {
+      template: '#ComponentA'
+    })
+    app.component('ComponentB', {
+      template: '#ComponentB'
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

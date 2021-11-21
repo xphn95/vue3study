@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+
+  <template id="app">
+    <div>{{animateNumber}}</div>
+    <button @click="handleClick">增加</button>
+  </template>
+  <script>
+    const { createApp } = Vue
+    const app = createApp({
+      template: "#app",
+      data() {
+        return {
+          num: 1,
+          animateNumber: 1
+        }
+      },
+      methods: {
+        handleClick() {
+          this.num = 10
+          if (this.animateNumber < this.num) {
+            const id = setInterval(() => {
+              this.animateNumber += 1
+              if (this.animateNumber === this.num) {
+                clearInterval(id)
+              }
+            }, 100)
+          }
+        }
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

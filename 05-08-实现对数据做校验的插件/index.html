@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <template id="app">
+    <div>name: {{name}}, age: {{age}}</div>
+    <input type="text" v-model.lazy="name">
+    <input type="text" v-model.lazy="age">
+  </template>
+  <script>
+    // 对数据做校验的插件
+    const myMixin = {
+      created() {
+        console.log('mixin ready!!')
+        // console.log(this.$options.rules)
+
+        for (const key in this.$options.rules) {
+          const item = this.$options.rules[key]
+          console.log(key)
+          this.$watch(key, value => {
+            if(item.validate(value)) console.warn(item.message)
+          })
+        }
+      }
+    }
+    const validatorPlugin = (app, options) => {
+      app.mixin(myMixin)
+    }
+    const root = {
+      template: '#app',
+      data() {
+        return {
+          name: 'mike',
+          age: 18
+        }
+      },
+      rules: {
+        age: {
+          validate: age => {
+            return age < 25
+          },
+          message: '太年轻了'
+        },
+        name: {
+          validate: name => name.length < 5,
+          message: '名字太短'
+        }
+      }
+    }
+    const app = Vue.createApp(root)
+    app.use(validatorPlugin)
+    app.mount('#root')
+  </script>
+</body>
+</html>

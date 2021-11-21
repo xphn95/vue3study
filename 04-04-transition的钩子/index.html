@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+
+  <template id="app">
+    <transition
+      @before-enter="handleBeforeEnter"
+      @enter="handleEnterActive"
+      @after-enter="handleAfterEnter"
+      @before-leave="handleBeforeLeave"
+      @leave="handleLeaveActive"
+      @after-leave="handleAfterLeave"
+    >
+      <div v-show="isShow">hello</div>
+    </transition>
+    <button @click="handleClick">切换</button>
+  </template>
+
+  <script>
+    const { createApp } = Vue
+    const app = createApp({
+      template: '#app',
+      data() {
+        return {
+          isShow: false
+        }
+      },
+      methods: {
+        handleClick() {
+          this.isShow = !this.isShow
+        },
+        handleBeforeEnter(el) {
+          el.style.color = 'pink'
+        },
+        handleEnterActive(el, done) {
+          const id = setInterval(() => {
+            if (el.style.color === 'pink') {
+              el.style.color = 'green'
+            } else {
+              el.style.color = 'pink'
+            }
+          }, 1000)
+          setTimeout(() => {
+            clearInterval(id)
+            done() // 感觉用途是把执行权交给下一个钩子
+          }, 3000)
+        },
+        handleAfterEnter() {
+          console.log(123)
+        },
+        handleBeforeLeave(el) {
+          el.style.fontSize = '20px'
+        },
+        handleLeaveActive(el, done) {
+          const id = setInterval(() => {
+            if (el.style.color === 'green') {
+              el.style.color = '#c44569'
+            } else {
+              el.style.color = 'green'
+            }
+          }, 1000)
+          setTimeout(() => {
+            clearInterval(id)
+            done()
+          }, 3000)
+        },
+        handleAfterLeave() {
+          console.log('done')
+        }
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

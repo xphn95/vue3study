@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <template id="app">
+    <div>
+      <p @click="handleClick">name: {{name}}</p>
+      <p>age: {{age}}</p>
+    </div>
+  </template>
+  <script>
+    const root = {
+      template: '#app',
+      /* data() {
+        return {
+          name: 'mike',
+          age: 20
+        }
+      }, */
+      // created 实例被完全初始化之前
+      // setup 函数返回的内容都可以暴露出来, 模板中可以直接使用
+      setup(props, context)  {
+        let name = 'genji'
+        setTimeout(() => {
+          name = 'McCree'
+          console.log(name)
+        }, 2000)
+        return {
+          name,
+          handleClick: () => {
+            alert(123)
+          }
+        }
+      }
+    }
+    const app = Vue.createApp(root)
+    app.mount('#root')
+  </script>
+</body>
+</html>

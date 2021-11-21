@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    div {
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <!-- 1. 传整个对象 -->
+    <!-- 3. 绑定的属性不支持驼峰 -->
+    <test v-bind='params' :content-abc="content" :num="num"></test>
+  </div>
+  <script>
+    const test = {
+      template:  `
+        <div @click="myNum += 1">{{a}}-{{b}}-{{c}}-{{d}}-{{contentAbc}}-{{myNum}}</div>
+      `,
+      // 2. 接收传递的参数时把属性分解开
+      // 4. 短横线形式的属性接收时要写成驼峰形式
+      props: {
+        a: Number,
+        b: Number,
+        c: Number,
+        d: Number,
+        contentAbc: Number,
+        num: Number
+      },
+      data () {
+        return {
+          myNum: this.num
+        }
+      }
+    }
+    const { createApp } = Vue
+    const app = createApp({
+      data() {
+        return {
+          params: {
+            a: 123,
+            b: 456,
+            c: 789,
+            d: 135
+          },
+          content: 246,
+          num: 111
+        }
+      },
+      components: {
+        test
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    div {
+      user-select: none;
+    }
+  </style>
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+
+  <template id="rootComponent">
+    <!-- v-once 让某个元素只渲染一次 -->
+    <!-- ref 用来获取节点的语法, 或者用来调用子组件的方法 -->
+    <div v-once>{{count}}</div>
+    <div @click="handleClick">{{count}}</div>
+    <div ref="test">hello</div>
+    <common-item
+      @click="showContent"
+      ref="common"
+    >
+    </common-item>
+  </template>
+  <script>
+    const { createApp } = Vue
+    const app = createApp({
+      template: '#rootComponent',
+      data() {
+        return {
+          count: 0
+        }
+      },
+      methods: {
+        handleClick() {
+          this.count += 1
+        },
+        showContent() {
+          this.$refs.common.sayHello()
+        }
+      },
+      mounted () {
+        console.log(this.$refs.test)
+      }
+    })
+    app.component('common-item', {
+      template: `<div>
+        common-item
+      </div>`,
+      methods: {
+        sayHello() {
+          alert('hello')
+        }
+      }
+    })
+    app.mount('#root')
+  </script>
+</body>
+</html>
